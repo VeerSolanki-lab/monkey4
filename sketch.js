@@ -27,21 +27,22 @@ function preload(){
 
 
 function setup() {
-  createCanvas(670, 400);
+  createCanvas(windowWidth,windowHeight);
   score=0
-  r=createSprite(340,240)
+  r=createSprite(windowWidth/2,windowHeight/2)
   r.addImage(rI);
-  over=createSprite(340,100)
+  over=createSprite(windowWidth/2,windowHeight/2-150);
   over.addImage(overI);
   over.scale=0.5
-  up=createSprite(630,350)
+  up=createSprite(windowWidth-40,windowHeight-40)
   up.addImage(upI);
   up.scale=0.3
-  ground=createSprite(0,400,1500,10)
+  ground=createSprite(windowWidth,windowHeight,1500,10)
   
    monkey=createSprite(90,370,10,10)
   monkey.addAnimation("monkey_running",monkey_running)
   monkey.scale=0.1
+  
   
   
   
@@ -50,9 +51,10 @@ function setup() {
 function draw() {
   background("green")
   
-  if(keyDown("space")||(mousePressedOver(up))&&monkey.y >= 350){
+  if((mousePressedOver(up)||touches.length>0)&&monkey.y >= 350){
     monkey.velocityY=-10
     gameState=PLAY;
+     touches = [];
   }
 if (gameState === PLAY){
  
@@ -80,7 +82,7 @@ if (gameState === PLAY){
 
 }
   else if (gameState === END){
-    monkey.velocityY=0;
+  monkey.velocityY=0;
     ground.velocityX=0;
     obstacleGroup.destroyEach();
     FoodGroup.destroyEach();
@@ -89,8 +91,9 @@ if (gameState === PLAY){
     over.visible=true;
     score=0
     up.visible=false;
-    if(mousePressedOver(r)){
+    if(touches.lenght>0||mousePressedOver(r)){
       gameState=PLAY
+      touches = []
     }
   }
   
@@ -108,15 +111,15 @@ if (gameState === PLAY){
 }
 
 function fruits(){
-  banana=createSprite(670,Math.round(random(170,230)),10,10)
+  banana=createSprite(670,Math.round(random(windowWidth,windowHeight-200)),10,10)
   banana.addImage(bananaImage)
   banana.scale=0.1
-  banana.velocityX=-3
+  banana.velocityX=-5
   FoodGroup.add(banana)
 }
 
 function stones(){
-  obstacle=createSprite(670,380,10,10)
+  obstacle=createSprite(windowWidth,windowHeight,10,10)
   obstacle.addImage(obstaceImage)
   obstacle.velocityX=-4
   obstacle.scale=0.2
